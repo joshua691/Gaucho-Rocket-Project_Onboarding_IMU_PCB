@@ -2,32 +2,60 @@
 
 ## Overview
 
-This project was developed as part of the onboarding process for Gaucho Rocket Project. The goal was to design a custom PCB capable of collecting inertial measurement data and transmitting it to other systems wirelessly.
+This project was developed as part of the onboarding process for Gaucho Rocket Project (GRP). The goal was to design a custom PCB for a rocket motion sensing system capable of collecting inertial measurement data, such as acceleration and angular velocity, and transmitting it wirelessly to other systems.
 
-The board integrates an STM32F446RE microcontroller, an ESP32, an MPU6050 IMU, and an ICM-20948 IMU. The STM32 communicates with the IMUs over I²C and forwards the sensor data to the ESP32 over UART, allowing the ESP32 to handle wireless communication.
+The board integrates an STM32F446RE microcontroller, an ESP32, an MPU6050 IMU, and an ICM-20948 IMU. The STM32 interfaces with both IMUs over I²C and sends the collected sensor data to the ESP32 over UART. This is because the ESP32 is intended to send that data over wireless transmission to other systems.
 
-I designed the schematic and PCB layout in KiCad. Although I had prior experience using KiCad, this was my first project in which I independently developed most of the hardware design.
+Although I had prior experience using KiCad, this was my first project in which I designed most of the schematic and PCB layout independently. It gave me an opportunity to apply what I already knew while developing a deeper understanding of datasheets, circuit implementation, and PCB layout.
 
 ## System Architecture
 
-- **Sensing:** The MPU6050 and ICM-20948 provide inertial measurements, including acceleration and angular velocity.
-- **Sensor interface:** The STM32 communicates with both IMUs over I²C.
-- **Data communication:** The STM32 forwards sensor measurements to the ESP32 over UART.
-- **Wireless interface:** The ESP32 is responsible for transmitting data to other systems wirelessly.
-- **Power management:** The design includes voltage regulation and supporting circuitry for the board's power requirements.
+The design consists of four main components:
 
-## Design Considerations
+- **STM32F446RE:** Interfaces with both IMUs over I²C and forwards sensor data to the ESP32.
+- **ESP32:** Receives data from the STM32 over UART and provides the wireless communication interface.
+- **MPU6050:** Provides accelerometer and gyroscope measurements.
+- **ICM-20948:** Provides additional inertial measurements.
 
-One aspect of the design was integrating multiple microcontrollers, sensors, and power circuits into a single PCB while accounting for component placement, routing, and the ESP32 antenna keep-out region.
+The board also includes voltage regulation, supporting power circuitry, and connections for programming the STM32 through its Serial Wire Debug (SWD) interface.
 
-This project gave me practical experience translating a system-level architecture into a schematic and PCB layout, connecting hardware interfaces across subsystems, and working through the constraints of a physical board design.
+## Design Process
 
-## Project Status
+The main components were specified by the onboarding assignment, so my focus was on implementing their connections and integrating them into the schematic and PCB layout.
 
-The schematic and PCB layout were completed in KiCad. The board was not manufactured, so its electrical performance and functionality have not been validated on physical hardware.
+I first used tutorials and the onboarding materials as references for parts of the schematic, particularly the STM32 circuitry. I also consulted the component datasheets to better understand the requirements behind the circuit configurations and the supporting components. Once the schematic was designed, I moved to the PCB layout.
 
-## Tools
+## PCB Design Considerations
 
-- KiCad
-- Embedded systems hardware design
-- I²C and UART interface design
+### Component Placement and Routing
+
+My main goal during PCB layout was to keep the design as simple and straightforward as possible. I wanted component placement and trace routing to work together, with short, direct signal paths and supporting components grouped near the main components they serve. During the layout process, I tried to consider how each component would connect to the rest of the circuit when deciding where to place it.
+
+For example, when laying out the STM32's crystal oscillator (Y1), I positioned the supporting capacitor (C10) along the route between the oscillator and the STM32 so that the connections could be routed naturally without unnecessary detours. I applied the same general approach throughout the board, placing related components close together, keeping the STM32 and ESP32 positioned with their UART connections in mind, and minimizing vias between PCB layers.
+
+I also considered power distribution while arranging components and routing traces, including the placement of voltage regulators and the trace widths used for different power nets. I placed the majority of the capacitors close to their corresponding pins on the microcontrollers, IMUs, or regulators to help reduce parasitic inductance in the paths and support stable power delivery.
+
+Overall, I approached the layout as a balance between component placement and routing, aiming for a compact, organized board where the connections were direct and the supporting circuitry was positioned logically around the components it served.
+
+### Firmware Programming Access
+
+I included access to the STM32's SWDIO and SWCLK signals to support firmware flashing and debugging through the Serial Wire Debug interface. This provides a way to program the microcontroller during development.
+
+## Project Status and Future Work
+
+The schematic and PCB layout were completed in KiCad, but the board was not manufactured or tested. Its electrical performance and functionality have therefore not been validated on physical hardware.
+
+Future work would include reviewing the design against component datasheets and PCB design rules, manufacturing the board, and testing the power supplies, sensor interfaces, UART communication, wireless data path, and overall functionality of the PCB.
+
+## Lessons Learned
+
+This process helped me connect schematic-level decisions to the physical constraints of PCB design. Since this was the first PCB I designed primarily myself, I gained experience balancing component placement and routing, considering power distribution and decoupling, and providing programming access for firmware development.
+
+It also gave me a better appreciation for how initial component placement affects routing complexity and how datasheets can guide hardware implementation and what the overarching design of a PCB would be since datasheets tell exactly what the supporting circuitry for a component is, what the power requirements are, and what the components are capable of.
+
+## Tools and Interfaces
+
+- **KiCad:** Schematic capture and PCB layout
+- **I²C:** Communication between the STM32 and IMUs
+- **UART:** Communication between the STM32 and ESP32
+- **SWD:** STM32 firmware programming and debugging
