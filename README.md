@@ -23,6 +23,8 @@ The board also includes voltage regulation, supporting power circuitry, and conn
 
 The main components were specified by the onboarding assignment, so my focus was on implementing their connections and integrating them into the schematic and PCB layout.
 
+<img width="533" height="361" alt="GRP Onboarding Schematic" src="https://github.com/user-attachments/assets/fb3229c0-14b6-403b-ad11-c70f0af1eff7" />
+
 I first used tutorials and the onboarding materials as references for parts of the schematic, particularly the STM32 circuitry. I also consulted the component datasheets to better understand the requirements behind the circuit configurations and the supporting components. Once the schematic was designed, I moved to the PCB layout.
 
 ## PCB Design Considerations
@@ -33,6 +35,8 @@ My main goal during PCB layout was to keep the design as simple and straightforw
 
 For example, when laying out the STM32's crystal oscillator (Y1), I positioned the supporting capacitor (C10) along the route between the oscillator and the STM32 so that the connections could be routed naturally without unnecessary detours. I applied the same general approach throughout the board, placing related components close together, keeping the STM32 and ESP32 positioned with their UART connections in mind, and minimizing vias between PCB layers.
 
+<img width="194" height="293" alt="layout consideration example" src="https://github.com/user-attachments/assets/e55a100f-e2a4-40c8-93fb-62b5a5eb968f" />
+
 I also considered power distribution while arranging components and routing traces, including the placement of voltage regulators and the trace widths used for different power nets. I placed the majority of the capacitors close to their corresponding pins on the microcontrollers, IMUs, or regulators to help reduce parasitic inductance in the paths and support stable power delivery.
 
 Overall, I approached the layout as a balance between component placement and routing, aiming for a compact, organized board where the connections were direct and the supporting circuitry was positioned logically around the components it served.
@@ -40,6 +44,8 @@ Overall, I approached the layout as a balance between component placement and ro
 ### Firmware Programming Access
 
 I included access to the STM32's SWDIO and SWCLK signals to support firmware flashing and debugging through the Serial Wire Debug interface. This provides a way to program the microcontroller during development.
+
+<img width="502" height="366" alt="GRP Onboarding PCB layout" src="https://github.com/user-attachments/assets/80f96eea-44bf-441c-9634-e8d52f54676c" />
 
 ## Project Status and Future Work
 
@@ -59,3 +65,6 @@ It also gave me a better appreciation for how initial component placement affect
 - **I²C:** Communication between the STM32 and IMUs
 - **UART:** Communication between the STM32 and ESP32
 - **SWD:** STM32 firmware programming and debugging
+
+<img width="574" height="338" alt="GRP Onboarding 3D view" src="https://github.com/user-attachments/assets/8b4b457c-0f4b-44c7-908a-77fb2f88fa36" />
+
